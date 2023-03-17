@@ -1,16 +1,8 @@
 package main
 
 import (
-	"regexp"
-
 	"github.com/Masterminds/semver/v3"
 )
-
-var clearVersionregex = regexp.MustCompile(`[^0-9.]`)
-
-func toClearVersion(s string) string {
-	return clearVersionregex.ReplaceAllString(s, "")
-}
 
 func isVulnerableBetweenRanges(currentVersion string, vulnerableRanges []string) (bool, string) {
 	// Check if the current version match exactly the vulnerable ranges

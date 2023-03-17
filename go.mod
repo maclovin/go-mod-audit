@@ -1,4 +1,4 @@
-module go-mod-audit
+module github.com/maclovin/go-mod-audit
 
 go 1.19
 

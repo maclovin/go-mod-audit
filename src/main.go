@@ -51,7 +51,6 @@ type GoVulnResponse []struct {
 	SchemaVersion string `json:"schema_version"`
 }
 
-// TODO: Implement the usage of this interface
 type Vulnerability struct {
 	id           string
 	ref          string
