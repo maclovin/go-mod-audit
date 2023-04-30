@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	headerFmt      = color.New(color.FgHiGreen, color.Bold).SprintfFunc()
+	clearFmt       = color.New(color.FgHiGreen, color.Bold).SprintfFunc()
 	brightFmt      = color.New(color.FgHiWhite, color.Bold).SprintFunc()
 	vulnModFmt     = color.New(color.FgHiRed, color.Bold).SprintfFunc()
 	tableHeaderFmt = color.New(color.FgHiWhite, color.Underline, color.Bold).SprintfFunc()
@@ -16,6 +16,10 @@ var (
 
 func displayHeader(project *Project) {
 	fmt.Println(brightFmt("\nAudit Report for " + project.Name + " (Go v" + project.GoVersion + ")\n"))
+}
+
+func displayClear() {
+	fmt.Println(clearFmt("Not vulnerabilities was found!\n"))
 }
 
 func displayModuleAuditTable(module *Module) {
@@ -32,8 +36,8 @@ func displayModuleAuditTable(module *Module) {
 	tbl := table.New("Vuln ID", "Fixed Version", "Ref")
 	tbl.WithHeaderFormatter(tableHeaderFmt)
 
-	for _, v := range module.Vulnerabilities {
-		tbl.AddRow(v.ID, v.FixedVersion, v.Ref)
+	for _, vuln := range module.Vulnerabilities {
+		tbl.AddRow(vuln.ID, vuln.FixedVersion, vuln.Ref)
 	}
 
 	tbl.Print()

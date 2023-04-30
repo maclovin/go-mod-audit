@@ -34,6 +34,10 @@ func (p *Project) ToXML() {
 }
 
 func (p *Project) DisplayAudit() {
+	if len(p.VulnerableModules) == 0 {
+		displayClear()
+	}
+
 	for _, module := range p.VulnerableModules {
 		displayModuleAuditTable(&module)
 	}
