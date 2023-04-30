@@ -50,12 +50,14 @@ type Vulnerability struct {
 	ID           string
 	Ref          string
 	FixedVersion string
+	Details      string
 }
 
 type Module struct {
 	Name       string
 	Version    string
 	Vulnerable bool
+	Indirect   bool
 
 	Vulnerabilities []Vulnerability
 }
@@ -83,8 +85,6 @@ func (m *Module) Parse() {
 		var responseObject GoVulnResponse
 		json.Unmarshal(responseData, &responseObject)
 
-		fmt.Println(responseObject)
-
 		// I know, shame on me, But I'm just hacking.
 		for _, vuln := range responseObject {
 			for _, affected := range vuln.Affected {
@@ -108,6 +108,7 @@ func (m *Module) Parse() {
 							ID:           vuln.ID,
 							Ref:          vuln.DatabaseSpecific.URL,
 							FixedVersion: fixedVersion,
+							Details:      vuln.Details,
 						})
 
 						if verbose {

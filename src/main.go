@@ -39,8 +39,9 @@ func main() {
 
 	for _, m := range f.Require {
 		currentMod := &Module{
-			Name:    m.Mod.Path,
-			Version: m.Mod.Version,
+			Name:     m.Mod.Path,
+			Version:  m.Mod.Version,
+			Indirect: m.Indirect,
 		}
 
 		currentMod.Parse()

@@ -20,7 +20,14 @@ func displayHeader(project *Project) {
 
 func displayModuleAuditTable(module *Module) {
 	fmt.Print("\n")
-	fmt.Println(vulnModFmt(module.Name + " (" + module.Version + ")\n"))
+
+	indirect := ""
+
+	if module.Indirect {
+		indirect = "(Indirect)"
+	}
+
+	fmt.Println(vulnModFmt(module.Name + " " + module.Version + " " + indirect + "\n"))
 
 	tbl := table.New("Vuln ID", "Fixed Version", "Ref")
 	tbl.WithHeaderFormatter(tableHeaderFmt)
