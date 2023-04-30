@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"sync"
 
 	"golang.org/x/mod/modfile"
 )
@@ -37,19 +38,29 @@ func main() {
 		VulnerableModules: []Module{},
 	}
 
+	var wg sync.WaitGroup
+
 	for _, m := range f.Require {
+		wg.Add(1)
+
 		currentMod := &Module{
 			Name:     m.Mod.Path,
 			Version:  m.Mod.Version,
 			Indirect: m.Indirect,
 		}
 
-		currentMod.Parse()
+		go func() {
+			defer wg.Done()
+			currentMod.Parse()
 
-		if currentMod.Vulnerable {
-			p.VulnerableModules = append(p.VulnerableModules, *currentMod)
-		}
+			if currentMod.Vulnerable {
+				p.VulnerableModules = append(p.VulnerableModules, *currentMod)
+			}
+		}()
+
 	}
+
+	wg.Wait()
 
 	if !toJSON && !toXML {
 		displayHeader(p)

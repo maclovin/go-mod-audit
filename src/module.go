@@ -69,6 +69,8 @@ func (m *Module) Parse() {
 		log.Fatal((err))
 	}
 
+	defer response.Body.Close()
+
 	if response.Status != "200 OK" {
 		if verbose {
 			fmt.Println("[INFO] No vulnerability entries for", m.Name)
