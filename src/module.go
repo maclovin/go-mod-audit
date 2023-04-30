@@ -27,9 +27,6 @@ type GoVulnResponse []struct {
 				Fixed      string `json:"fixed,omitempty"`
 			} `json:"events"`
 		} `json:"ranges"`
-		DatabaseSpecific struct {
-			URL string `json:"url"`
-		} `json:"database_specific"`
 		EcosystemSpecific struct {
 			Imports []struct {
 				Path    string   `json:"path"`
@@ -44,7 +41,9 @@ type GoVulnResponse []struct {
 	Credits []struct {
 		Name string `json:"name"`
 	} `json:"credits"`
-	SchemaVersion string `json:"schema_version"`
+	DatabaseSpecific struct {
+		URL string `json:"url"`
+	} `json:"database_specific"`
 }
 
 type Vulnerability struct {
@@ -84,6 +83,8 @@ func (m *Module) Parse() {
 		var responseObject GoVulnResponse
 		json.Unmarshal(responseData, &responseObject)
 
+		fmt.Println(responseObject)
+
 		// I know, shame on me, But I'm just hacking.
 		for _, vuln := range responseObject {
 			for _, affected := range vuln.Affected {
@@ -105,7 +106,7 @@ func (m *Module) Parse() {
 						m.Vulnerable = true
 						m.Vulnerabilities = append(m.Vulnerabilities, Vulnerability{
 							ID:           vuln.ID,
-							Ref:          affected.DatabaseSpecific.URL,
+							Ref:          vuln.DatabaseSpecific.URL,
 							FixedVersion: fixedVersion,
 						})
 
